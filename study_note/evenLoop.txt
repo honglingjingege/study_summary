@@ -1,0 +1,36 @@
+
+		Node.js 在主线程里维护了一个事件队列，当接到请求后，就将该请求作为一个事件放入这个队列中，然后继续接收其他请求。
+	当主线程空闲时(没有请求接入时)，就开始循环事件队列，检查队列中是否有要处理的事件，这时要分两种情况：如果是非 I/O 任务，
+	就亲自处理，并通过回调函数返回到上层调用；如果是 I/O 任务，就从 线程池 中拿出一个线程来处理这个事件，并指定回调函数，然后继续循环队列中的其他事件。
+	当线程中的 I/O 任务完成以后，就执行指定的回调函数，并把这个完成的事件放到事件队列的尾部，等待事件循环，当主线程再次循环到该事件时，
+	就直接处理并返回给上层调用。 这个过程就叫 事件循环 (Event Loop)，其运行原理如下图所示：
+
+1	timer阶段
+执行到期的setTimeout / setInterval队列回调。
+
+2 I/O阶段
+执行上轮残留的callback。
+
+3 idle，prepare
+这个阶段仅在内部使用，可以不必理会。
+
+4 poll
+等待回调。
+a、执行回调
+b、执行定时器
+如果有遇到setTimeout / setInterval，则返回到timer阶段。如果遇到setImmediate，则前往check阶段。
+
+5 check
+执行setImmediate（）的回调函数。
+
+6 close callbacks
+例如：socket.on(‘close’, …)这种close事件的回调。
+
+NodeJs与浏览器的区别：
+nodejs的Macro Task分为好几种，而这几种又有不同的task queue，而不同的 task queue又有顺序区别，而Micro Task是穿插在每一种Macro Task之间的。
+setTimeout / setInterval 属于timer类型；
+setImmediate 属于 check类型；
+socket的close事件属于close callbacks类型；
+其他的Macro Task 属于poll类型；
+process.nextTick本质上属于Micro Task，但是它先于所有其他的Micro Task 执行；
+所有Micro Task 的执行时机，是不同类型Macro Task 切换的时候；

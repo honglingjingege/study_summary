@@ -1,0 +1,31 @@
+操作系统会拆分CPU为一段段时间的运行片，轮流分配给不同的程序。对于多cpu，多个进程可以并行在多个cpu中计算，当然也会存在进程切换；对于单cpu，多个进程在这个单cpu中是并发运行，根据时间片读取上下文+执行程序+保存上下文。同一个进程同一时间段只能在一个cpu中运行，如果进程数小于cpu数，那么未使用的cpu将会空闲。
+
+多线程的概念主要有两种：一种是用户态多线程；一种是内核态多线程，对于内核态多线程（java1.2之后用内核级线程），在操作系统内核的支持下可以在多核下并行运行；
+对于多核cpu，进程中的多线程并行执行。对于单核cpu，多线程在单cpu中并发执行，根据时间片切换线程。同一个线程同一时间段只能在一个cpu内核中运行，如果线程数小于cpu内核数，那么将有多余的内核空闲。
+
+
+child_Process:
+	exec():
+		child_process.exec(command[, options], callback)
+		创建一个shell，然后在shell里执行命令。执行完成后，将stdout、stderr作为参数传入回调方法。
+		
+	execFile():
+		child_process.execFile(file, args[, callback])
+		跟.exec()类似，不同点在于，没有创建一个新的shell。至少有两点影响
+			1.比child_process.exec()效率高一些。（实际待测试）
+			2.一些操作，比如I/O重定向，文件glob等不支持。
+	
+	spawn():
+		child_process.spawn(command[, args][, options])
+		
+	fork:
+		child_process.fork(modulePath[, args][, options])
+		child_process.fork 是 spawn() 方法的特殊形式，用于创建进程，语法格式如下
+		
+		
+	首先，exec() 内部调用 execFile() 来实现，而 execFile() 内部调用 spawn() 来实现。
+	exec() -> execFile() -> spawn()
+	其次，execFile() 内部默认将 options.shell 设置为false，exec() 默认不是false。	
+	
+	
+	地址： https://segmentfault.com/a/1190000007735211

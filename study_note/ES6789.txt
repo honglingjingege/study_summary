@@ -1,0 +1,64 @@
+set去重：let arr = [...new Set(duplicateArr)]   或   Array.from(...new Set(duplicateArr))
+
+数组：array.   foreach  map reduce some every  filter
+对象：obj.     keys()   values()  entries()  assign()
+
+
+
+es5:  扩展了Object、Array、Function等的功能
+es6:类、模块化、剪头函数、函数参数默认值、模版字符串、解构赋值、延展操作符、对象属性简写（对象扩展，还有计算属性）、Promise、let、const（块级作用域）、新数据结构Set、Map、Symbol
+es7:  Array.prototype.includes()、指数操作符(**)[Math.pow(2,10)等价于2**10]  
+es8:  async/await、Object.values()、Object.entries()、String padding(字符串填充padStart(),padEnd())、函数参数列表结尾允许逗号、Object.getOwnPropertyDescriptors()[获取object属性],Object.hasOwnProperty()[判断object有没有***属性]等
+
+CLASS : class、extends、constructor都是prototype的语法糖,  继承的时候，super要写在子类构造函数的最顶部
+
+EXPORT:  	export var name = 'Ryan'//导出变量
+			export const sort = Math.sqrt//导出常量
+			export {name, sort}//导出对象（模块）
+			export function aModule(){return 1000}//导出函数
+			
+解构赋值:  	var foo = [1,2,3,4,5]
+
+			var [one,twe,three] = foo
+			console.log(one)//1
+			console.log(twe)//2
+			console.log(three)//3
+
+			如果想要会略某些值，则可以
+
+			var [first,,last] = foo
+			console.log(first)//1
+			console.log(last)//3
+			
+			var [first,,,,last] = foo
+			console.log(first)//1
+			console.log(last)//5
+
+			也可以先声明变量
+
+			var a,b
+
+			[a,b] = [1,2]
+
+			console.log(a)//1
+			console.log(b)//2
+
+			如果没有从数组中获取到值，可以为变量设置一个默认值
+
+			var a,b
+
+			[a=5,b=7]=[1]
+
+			console.log(a)//1
+			console.log(b)//7
+
+			方便的交互两个变量的值
+
+			var a=1
+			var b = 3
+
+			[a,b]=[b,a]
+
+			console.log(a)//3
+			console.log(b)//1	
+			

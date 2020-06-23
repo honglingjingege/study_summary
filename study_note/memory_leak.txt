@@ -1,0 +1,41 @@
+变量生命周期：局部变量会释放当函数调用结束，全局变量当页面关闭或者进程shutdown才会释放
+注意事项：1 谨慎定义全局变量()  2.谨慎使用闭包(维持局部变量，使其不得释放) 3.变量的相互引用(页面关闭或进程shutdown才会释放)
+		  4 意外的全局变量(当非严格模式下，局部定义的变量没有用var声明或局部函数中用this会成为全局变量)
+		  5 setInterval、setTimeout定时器不用时候要clear  6 事件监听时候不用了要close. 7.没有清理的DOM元素引用(dom DOM删除了，但是js对象里还存在引用)
+		  8 当页面中元素被移除或替换时，若元素绑定的事件仍没被移除，在IE中不会作出恰当处理，此时要先手工移除事件，不然会存在内存泄露。
+	泄漏点：
+		1.DOM/BOM 对象泄漏
+				<div id="myDiv">
+					<input type="button" value="Click me" id="myBtn">
+				</div>
+				<script type="text/javascript">
+					var btn = document.getElementById("myBtn");
+					btn.onclick = function(){
+						btn.onclick = null;
+						document.getElementById("myDiv").innerHTML = "Processing...";
+					}
+				</script>
+		2.script 中存在对DOM/BOM 对象的引用导致
+		3.Javascript 对象泄漏
+				a = {p: {x: 1}};
+				b = a.p;
+				delete a.p;
+				执行这段代码之后b.x的值依然是1.由于已经删除的属性引用依然存在，因此在JavaScript的某些实现中，可能因为这种不严谨的代码而造成内存泄露。所以在销毁对象的时候，要遍历属性中属性，依次删除。
+		4.通常由闭包导致，比如事件处理回调，导致DOM对象和脚本中对象双向引用，这个时常见的泄漏原因
+		  
+		  
+		  
+Bom是什么？列举你知道的Bom对象。
+BOM是browser object model的缩写，简称浏览器对象模型 ，提供了独立于内容而与浏览器窗口进行交互的对象
+
+1、window对象 ，是JS的最顶层对象，其他的BOM对象都是window对象的属性；
+
+2、document对象，文档对象；
+
+3、location对象，浏览器当前URL信息；
+
+4、navigator对象，浏览器本身信息；
+
+5、screen对象，客户端屏幕信息；
+
+6、history对象，浏览器访问历史信息；

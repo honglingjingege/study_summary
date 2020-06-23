@@ -1,0 +1,74 @@
+http VS http2:
+	http2: 新的二进制格式    多路复用    header压缩    服务端推送(例如我的网页有一个sytle.css的请求，在客户端收到sytle.css数据的同时，服务端会将sytle.js的文件推送给客户端，当客户端再次尝试获取sytle.js时就可以直接从缓存中获取到，不用再发请求了)
+	
+https:
+	对称加密：
+		其加密过程如下：明文 + 加密算法 + 私钥 => 密文
+		解密过程如下： 密文 + 解密算法 + 私钥 => 明文
+	非对称加密：
+		被公钥加密过的密文只能被私钥解密，过程如下：
+			明文 + 加密算法 + 公钥 => 密文， 密文 + 解密算法 + 私钥 => 明文
+		被私钥加密过的密文只能被公钥解密，过程如下：
+			明文 + 加密算法 + 私钥 => 密文， 密文 + 解密算法 + 公钥 => 明文
+			
+	HTTPS为了兼顾安全与效率，同时使用了对称加密和非对称加密。数据是被对称加密传输的，对称加密过程需要客户端的一个密钥，为了确保能把该密钥安全传输到服务器端，采用非对称加密对该密钥进行加密传输，总的来说，对数据进行对称加密，对称加密所要使用的密钥通过非对称加密传输。
+
+	HTTPS在传输的过程中会涉及到三个密钥：
+
+	服务器端的公钥和私钥，用来进行非对称加密
+
+	客户端生成的随机密钥，用来进行对称加密
+
+	一个HTTPS请求实际上包含了两次HTTP传输，可以细分为8步。
+	1.客户端向服务器发起HTTPS请求，连接到服务器的443端口
+
+	2.服务器端有一个密钥对，即公钥和私钥，是用来进行非对称加密使用的，服务器端保存着私钥，不能将其泄露，公钥可以发送给任何人。
+
+	3.服务器将自己的公钥发送给客户端。
+
+	4.客户端收到服务器端的证书之后，会对证书进行检查，验证其合法性，如果发现发现证书有问题，那么HTTPS传输就无法继续。严格的说，这里应该是验证服务器发送的数字证书的合法性，关于客户端如何验证数字证书的合法性，下文会进行说明。如果公钥合格，那么客户端会生成一个随机值，这个随机值就是用于进行对称加密的密钥，我们将该密钥称之为client key，即客户端密钥，这样在概念上和服务器端的密钥容易进行区分。然后用服务器的公钥对客户端密钥进行非对称加密，这样客户端密钥就变成密文了，至此，HTTPS中的第一次HTTP请求结束。
+
+	5.客户端会发起HTTPS中的第二个HTTP请求，将加密之后的客户端密钥发送给服务器。
+
+	6.服务器接收到客户端发来的密文之后，会用自己的私钥对其进行非对称解密，解密之后的明文就是客户端密钥，然后用客户端密钥对数据进行对称加密，这样数据就变成了密文。
+
+	7.然后服务器将加密后的密文发送给客户端。
+
+	8.客户端收到服务器发送来的密文，用客户端密钥对其进行对称解密，得到服务器发送的数据。这样HTTPS中的第二个HTTP请求结束，整个HTTPS传输完成。
+
+
+TCP:
+	建立起一个TCP连接需要经过“三次握手”：
+
+	第一次握手：客户端发送syn包(syn=j)到服务器，并进入SYN_SEND状态，等待服务器确认；
+
+	第二次握手：服务器收到syn包，必须确认客户的SYN（ack=j+1），同时自己也发送一个SYN包（syn=k），即SYN+ACK包，此时服务器进入SYN_RECV状态；
+
+	第三次握手：客户端收到服务器的SYN＋ACK包，向服务器发送确认包ACK(ack=k+1)，此包发送完毕，客户端和服务器进入ESTABLISHED状态，完成三次握手。
+
+websocket:
+	1.用http进行握手
+		在http头消息中加了 	GET /chat HTTP/1.1
+							Host: server.example.com
+							Upgrade: websocket
+							Connection: Upgrade
+							Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+							Sec-WebSocket-Protocol: chat, superchat
+							Sec-WebSocket-Version: 13
+							Origin: http://example.com
+
+		Upgrade: websocket
+		Connection: Upgrade	告诉服务器：注意啦，窝发起的是Websocket协议，快点帮我					 找到对应的助理处理~不是那个老土的HTTP
+
+		Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+		Sec-WebSocket-Protocol: chat, superchat
+		Sec-WebSocket-Version: 13   
+				首先，Sec-WebSocket-Key 是一个Base64 encode的值，这个是浏览器随机生成的，告诉服务器：泥煤，不要忽悠窝，我要验证尼是不是真的是Websocket助理。然后，Sec_WebSocket-Protocol 是一个用户定义的字符串，用来区分同URL下，不同的服务所需要的协议。简单理解：今晚我要服务A，别搞错啦~最后，Sec-WebSocket-Version 是告诉服务器所使用的Websocket Draft（协议版本），在最初的时候，Websocket协议还在 Draft 阶段，各种奇奇怪怪的协议都有，而且还有很多期奇奇怪怪不同的东西，什么Firefox和Chrome用的不是一个版本之类的，当初Websocket协议太多可是一个大难题。。不过现在还好，已经定下来啦~大家都使用的一个东西~ 脱水：服务员，我要的是13岁的噢→_→
+
+				然后服务器会返回下列东西，表示已经接受到请求， 成功建立Websocket啦！HTTP/1.1 101 Switching Protocols
+				Upgrade: websocket
+				Connection: Upgrade
+				Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+				Sec-WebSocket-Protocol: chat这里开始就是HTTP最后负责的区域了，告诉客户，我已经成功切换协议啦~Upgrade: websocket
+				Connection: Upgrade依然是固定的，告诉客户端即将升级的是Websocket协议，而不是mozillasocket，lurnarsocket或者shitsocket。然后，Sec-WebSocket-Accept 这个则是经过服务器确认，并且加密过后的 Sec-WebSocket-Key。服务器：好啦好啦，知道啦，给你看我的ID CARD来证明行了吧。。后面的，Sec-WebSocket-Protocol 则是表示最终使用的协议。至此，HTTP已经完成它所有工作了，接下来就是完全按照Websocket协议进行了。具体的协议就不在这阐述了。
+	2.用tcp进行通信	

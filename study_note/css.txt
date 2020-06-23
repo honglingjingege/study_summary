@@ -1,0 +1,97 @@
+1.div 水平垂直居中：
+	1 绝对定位方法：不确定当前div的宽度和高度，采用 transform: translate(-50%,-50%); 当前div的父级添加相对定位（position: relative;）
+		div{
+		    background:red;
+		    position: absolute;
+		    left:50%;
+		    top:50%;
+		    transform: translate(-50%, -50%);
+		}
+
+	2 绝对定位方法：确定了当前div的宽度，margin值为当前div宽度一半的负值
+		div{
+		    width:600px;
+		    height: 600px;
+		    background:red;
+		    position: absolute;
+		    left:50%;
+		    top:50%;
+		    margin-left:-300px;
+		    margin-top:-300px;
+		}
+	3 绝对定位方法：绝对定位下top left right bottom 都设置0
+		{
+		    width: 600px;
+		    height: 600px;
+		    background: red;
+		    position:absolute;
+		    left:0;
+		    top: 0;
+		    bottom: 0;
+		    right: 0;
+		    margin: auto;
+		}	
+	4 flex布局方法：当前div的父级添加flex css样式
+		<div class="box">
+		    <div class="child">child</div>
+		</div>
+		.box{
+		    height:800px;
+		    -webkit-display:flex;
+		    display:flex;
+		    -webkit-align-items:center;
+		    align-items:center;
+		    -webkit-justify-content:center;
+		    justify-content:center;
+		    border:1px solid #ccc;
+		}
+		div.child{
+		    width:600px;
+		    height:600px;
+		    background-color:red;
+		}
+
+	5 table-cell实现水平垂直居中: table-cell middle center组合使用
+		<div class="table-cell">
+		    <p>我爱你</p>
+		</div>
+		.table-cell {
+		    display: table-cell;
+		    vertical-align: middle;
+		    text-align: center;
+		    width: 240px;
+		    height: 180px;
+		    border:1px solid #666;
+		}
+	6  弹性盒模型-css不定宽高水平垂直居中
+		.box{
+
+             height:600px;/去掉高度，只能垂直居中。
+             display:flex;
+             justify-content:center;
+             align-items:center;
+               /* aa只要三句话就可以实现不定宽高水平垂直居中。 */
+        }
+
+    7 	<p class="outerBox tableCell">
+		  </p><p class="ok">
+		    </p><p class="innerBox">tableCell</p>
+		  <p></p>
+		<p></p>
+		/*
+		table-cell实现居中
+		将父盒子设置为table-cell元素，设置
+		text-align:center,vertical-align: middle;
+		子盒子设置为inline-block元素
+		*/
+		.tableCell{
+		  display: table;
+		}
+		.tableCell .ok{
+		  display: table-cell;
+		  text-align: center;
+		  vertical-align: middle;
+		}
+		.tableCell .innerBox{
+		  display: inline-block;
+		}    

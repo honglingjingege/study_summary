@@ -1,0 +1,10 @@
+创建私有库：在 GitLab 上新建一个 project, 名字为: wave-test
+				对于公共模块, 最好是放在同一个 group 下, 例如放在 wavesnows 这个 group 下. 那么以后所有公共模块的 git 地址就可以统一为:
+				http://git.your-inc.com/{group}/{project}.git
+			将项目 clone 下来
+				git clone http://git.your-inc.com/wavesnows/wave-test.git
+			添加 package.json 配置, 注意限定 @scope
+				npm init --scope=wavesnows 
+			然后提交 push 上去
+			到这里私有模块就已经发布好了, 如果有项目要使用, 就配置下项目的 dependencies 即可.
+

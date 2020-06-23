@@ -1,0 +1,50 @@
+同步异步
+		异步：			const f = () => console.log('now');
+					Promise.resolve().then(f);
+					console.log('next');
+					// next
+					// now
+
+
+		异步同步化： 1 new promise()     2 async
+						const f = () => console.log('now');
+						(
+						  () => new Promise(
+							resolve => resolve(f())
+						  )
+						)();
+						console.log('next');
+						// now
+						// next
+
+
+						const f = () =>console.log('now');
+										(async()=>f())();
+										console.log('next')   
+						// now
+						// next	
+
+		promise.try    promise.catch  就是对 try  catch 的封装。				
+
+
+宏任务与微任务：
+	
+	宏任务(macrotask)：：
+
+		script(整体代码)、setTimeout、setInterval、UI 渲染、 I/O、postMessage、 MessageChannel、setImmediate(Node.js 环境)
+
+	微任务(microtask)：
+
+		Promise、 MutaionObserver、process.nextTick(Node.js环境）
+	
+		setTimeout(function () {
+			console.log(1);
+		});
+		new Promise(function(resolve,reject){
+			console.log(2)
+			resolve(3)
+		}).then(function(val){
+			console.log(val);
+		})
+		console.log(4);
+	结果： 2431

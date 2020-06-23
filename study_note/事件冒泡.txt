@@ -1,0 +1,19 @@
+
+addEventListener()
+
+e.stopPropagation()
+	阻止 js 事件冒泡。比如对于点击事件，点击当前节点之后，不会再触发父节点的点击事件。
+
+	当一个元素上的事件被触发的时候，比如说鼠标点击了一个按钮，同样的事件将会在那个元素的所有祖先元素中被触发，这一过程被称为事件冒泡。
+
+e.preventDefault()
+	阻止浏览器的默认行为。
+
+	浏览器的默认行为：对于一些特定的事件，浏览器有它默认的行为。
+	例如：
+
+	点击链接会进行跳转
+	点击鼠标右键会呼出浏览器右键菜单
+	填写表单时按回车会自动提交到服务器等
+return false
+	退出执行，return false 之后的所有触发事件和动作都不会被执行。有时候 return false 可以用来替代 stopPropagation() 和 preventDefault()。例如可以通过 return false 来阻止 a 标签的默认跳转事件，当然也可以用 preventDefault() 来代替。

@@ -1,0 +1,56 @@
+https://www.cnblogs.com/yzhihao/p/9770975.html
+
+void 0 == undifined  ，但是 undifined 在局部作用域可以被重写:   function T(){undifined = 10}
+
+Array.from方法用于将类似数组的对象或可遍历的对象转为真正的数组
+
+js数据类型：undefined、null、Boolean、String、Number、Object、Symbol，其中前5个基本类型中只有String Number Boolean存在包装类型
+
+var foo = [];
+foo[100] = 100;
+//循环1 循环一次
+for (var i in foo) {
+console.log(i);
+}
+//循环2 循环100次
+for (var i = 0; i < foo.length; i++) {
+console.log(i);
+}
+  
+性能检测调优工具： easy-monitor
+静态检查：flow   (//@flow)
+
+
+forEach:
+	用break会报错，使用return也不能跳出循环。
+
+
+for  in  和 for of:
+	1、for...in 循环：获得对象的键名
+      for...of 循环：遍历获得键值
+    2、对于普通对象，没有部署原生的 iterator 接口，直接使用 for...of 会报错
+    3、for...in 循环不仅遍历数字键名，还会遍历手动添加的其它键，甚至包括原型链上的键。for...of 则不会这样
+    4、forEach 循环无法中途跳出，break 命令或 return 命令都不能奏效
+    	for...of 循环可以与break、continue 和 return 配合使用，跳出循环
+    5、无论是 for...in 还是 for...of 都不能遍历出 Symbol 类型的值，遍历 Symbol 类型的值需要用 Object.getOwnPropertySymbols() 方法
+
+    总之，for...in 循环主要是为了遍历对象而生，不适用于遍历数组
+	for...of 循环可以用来遍历数组、类数组对象，字符串、Set、Map 以及 Generator 对象
+
+obj 和 map  区别：
+　1：Object对象有原型， 也就是说他有默认的key值在对象上面， 除非我们使用Object.create(null)创建一个没有原型的对象；
+　2：在Object对象中， 只能把String和Symbol作为key值， 但是在Map中，key值可以是任何基本类型(String, Number, Boolean, undefined, NaN….)，或者对象(Map, Set, Object, Function , Symbol , null….);
+　3：通过Map中的size属性， 可以很方便地获取到Map长度， 要获取Object的长度， 你只能用别的方法了；
+　　Map实例对象的key值可以为一个数组或者一个对象，或者一个函数，比较随意 ，而且Map对象实例中数据的排序是根据用户push的顺序进行排序的， 而Object实例中key,value的顺序就是有些规律了， (他们会先排数字开头的key值，然后才是字符串开头的key值)；
+
+另: 关于 Array 和 Set, 区别就是 Set 不可以有重复元素, 而 Array 可以有
+
+
+	同名碰撞
+我们知道，对象其实就是在堆开辟了一块内存，其实Map的键存的就是这块内存的地址。只要地址不一样，就是两个不同的键，这就解决了同名属性的碰撞问题，而传统的Object显然做不到这一点。
+	可迭代
+Map实现了迭代器，可用for...of遍历，而Object不行。
+	长度
+Map可以直接拿到长度.size，而Object不行
+	有序性
+填入Map的元素，会保持原有的顺序，而Object无法做到。

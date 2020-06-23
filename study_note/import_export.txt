@@ -1,0 +1,100 @@
+
+
+一 ：报错的写法原因是：没有提供对外的接口，第一种直接输出1，第二种虽然有变量m，但还是直接输出1，导致无法解构。
+
+	// 写法一
+	export var m = 1;
+
+	// 写法二
+	var m = 1;
+	export {m};
+
+	// 写法三
+	var n = 1;
+	export {n as m};
+
+
+	// 报错
+	export 1;
+
+	// 报错
+	var m = 1;
+	export m;
+
+function：
+
+	// 报错
+	function f() {}
+	export f;
+
+	// 正确
+	export function f() {};
+
+	// 正确
+	function f() {}
+	export {f};
+	
+And：export语句输出的接口，都是和其对应的值是动态绑定的关系，即通过该接口取到的都是模块内部实时的值。
+
+位置：export模块可以位于模块中的任何位置，但是必须是在模块顶层，如果在其他作用域内，会报错。
+
+export (es6  <----> import)
+
+	// 1. 直接导出某个变量或函数
+	export const a = 1;
+	export function fun() {
+
+	}
+
+	// 2. 先定义变量或者函数，再进行导出
+	const a = 1;
+	export {a};
+
+	function fun() {
+
+	}
+	export {fun}; 
+
+	// 3. 加别名进行导出
+	const a = 1;
+	export {a as b} // b是a的别名
+
+	// 4. export default 
+	注意，一个文件只能有一个default，这代表是模块的整体输出
+	
+module.export (commonJs 规范   <----->require  )
+	// example.js
+	module.exports.a = '111';
+	module.exports.fun= function() {
+	 
+	}
+
+	// 或者写成对象形式
+	module.exports = {
+	  a : '111',
+	  fun: function(){}
+	}
+
+
+
+
+
+require和import区别:
+	1. require/exports 是运行时动态加载，import/export 是静态编译
+	2. require/exports 输出的是一个值的拷贝，import/export 模块输出的是值的引用
+	3. 用法不一致：
+		const fs = require('fs')
+		exports.fs = fs
+		module.exports = fs
+
+		import {default as fs} from 'fs'
+		import * as fs from 'fs'
+		import {readFile} from 'fs'
+		import {readFile as read} from 'fs'
+		import fs, {readFile} from 'fs'
+		export default fs
+		export const fs
+		export function readFile
+		export {readFile, read}
+		export * from 'fs'
+	4. 出现的时间、地点不同 commonjs:2009   ES6:2015
